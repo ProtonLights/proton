@@ -1,0 +1,15 @@
+[submodule "proton-cli"]
+	path = proton-cli
+	url = git@github.com:ProtonLights/proton-cli.git
+[submodule "proton-runner"]
+	path = proton-runner
+	url = git@github.com:ProtonLights/proton-runner.git
+[submodule "proton-vixen-converter"]
+	path = proton-vixen-converter
+	url = git@github.com:ProtonLights/proton-vixen-converter.git
+[submodule "proton-layout-grabber"]
+	path = proton-layout-grabber
+	url = git@github.com:ProtonLights/proton-layout-grabber.git
+[submodule "proton-sequencer"]
+	path = proton-sequencer
+	url = git@github.com:ProtonLights/proton-sequencer.git
