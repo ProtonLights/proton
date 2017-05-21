@@ -1,0 +1,14 @@
+[package]
+name = "proton"
+version = "0.1.0"
+authors = ["Ryan Fredlund <rfredlund13@gmail.com>"]
+
+[lib]
+name = "protonlib"
+path = "src/lib.rs"
+
+[[bin]]
+name = "proton"
+path = "src/main.rs"
+
+[dependencies]
