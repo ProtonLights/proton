@@ -1,0 +1,66 @@
+// Config file stuff
+Location of user's key file (default: key.pem)
+    * Config validated right away to catch invalid key
+    * No need to add key arguments to commands
+Current project being worked on
+    * No need to pass as argument to a lot of commands
+    * Usually stays constant for a while
+    * Maybe add commands like "project switch" to change this
+        ** or options in "config"
+    * Also, layout-id (cached to be efficient)
+IP address of proton server
+    * Running cli
+    * Localhost for dev (default)
+// -------------------
+// Thoughts
+Each of these sections is a submodule, used by main
+Main similar to cli's main, but functions divided up
+    * Take in arguments, build command string, execute
+From Ramith - layout-id as specified string (name?), not int returned by new
+// -------------------
+
+
+layout new --layout-file
+layout get --layout-id(default: from project)
+layout delete --layout-id(default: from project)
+layout update --layout-id(default: from project) --layout-file
+
+project new --name --layout-id
+project get
+project delete
+project add-sequence --seqid [--index=end]
+project remove-sequence [--index] [--seqid]
+
+section new --tstart --tend --seqid --fixids(csv)
+section get
+section delete
+
+sequence new --name --music --duration --frame-length --data-file --layout-id
+sequence get --seqid
+sequence delete --seqid
+sequence set-layout --seqid --layout-id
+
+permissions add Administrate --user
+permissions add EditSequence --user --sequence
+permissions add EditSection --user --sequence --section
+permissions remove Administrate --user
+permissions remove EditSequence --user --sequence
+permissions remove EditSection --user --sequence --section
+permissions list
+
+user add --name
+user delete --name
+user get
+
+run update
+run repl
+
+patch channel --proton --dmx
+patch layout --layout-id --patch-file
+
+sequence
+import vixen-sequence --name --music --duration --frame-len --data-file --layout-id
+
+***project get-playlist-data
+***section update
+***config
