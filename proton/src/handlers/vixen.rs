@@ -16,9 +16,12 @@ pub fn handle_vixen(args: DocoptArgs, config: ProtonConfig) {
 // proton vixen import-layout <layout-file>
 pub fn vixen_import_layout(args: DocoptArgs, config: ProtonConfig) {
     let command = "proton-vixen-converter.py import-layout <layout-file>";
+
+    let layout_path = format!("{}/Profiles/{}", config.vixen_folder.clone(), args.arg_layout_file.unwrap());
+
     let args = [
         "import-layout".to_string(),
-        args.arg_layout_file.unwrap().to_string()];
+        layout_path];
 
     let _ = util::run_vixen_converter(command, &args);
 }
