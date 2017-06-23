@@ -29,7 +29,7 @@ Usage:
   proton permissions list
   proton user add <user-name>
   proton user delete <user-name>
-  proton user get <user-name>
+  proton user get <user-key>
   proton run update
   proton run repl
   proton run show
@@ -51,6 +51,7 @@ pub struct DocoptArgs {
   pub arg_secid: Option<u32>,
   pub arg_seqid: Option<u32>,
   pub arg_user_name: Option<String>,
+  pub arg_user_key: Option<String>,
 
   pub flag_audio: Option<String>,
   pub flag_data_file: Option<String>,

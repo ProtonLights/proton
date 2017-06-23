@@ -9,7 +9,7 @@ use docopt::Docopt;
 
 fn main() {
   // Load configuration file
-  let config = ProtonConfig::new("proton.cfg".to_string());
+  let config = ProtonConfig::load("proton.cfg".to_string());
 
   // Get command line arguments using Docopt. Provides guarantees about input types.
   let args: DocoptArgs = Docopt::new(protonlib::USAGE)
