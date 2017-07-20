@@ -3,15 +3,28 @@ pub const USAGE: &'static str = "
 Command-line interface for Proton
 
 Usage:
+  proton configure
   proton layout new <layout-name> <layout-file>
   proton layout get [<layout-name>]
   proton layout delete [<layout-name>]
   proton layout update [<layout-name>] --file=<layout-file>
+  proton patch channel --proton=<proton-ch> --dmx=<dmx-ch>
+  proton patch layout --patch=<patch-file> [--layout-name=<layout-name>]
+  proton permissions add Administrate --user=<user-name>
+  proton permissions add EditSequence --user=<user-name> --sequence=<seqid>
+  proton permissions add EditSection --user=<user-name> --sequence=<seqid> --section=<secid>
+  proton permissions remove Administrate --user=<user-name>
+  proton permissions remove EditSequence --user=<user-name> --sequence=<seqid>
+  proton permissions remove EditSection --user=<user-name> --sequence=<seqid> --section=<secid>
+  proton permissions list
   proton project new <project-name> <layout-name>
   proton project get <project-name>
   proton project delete <project-name>
   proton project add-sequence <seqid> [--index=<position>]
   proton project remove-sequence <position>
+  proton run update
+  proton run repl
+  proton run show
   proton section new --start=<tstart> --end=<tend> --sequence=<seqid> --fixtures=<fixids>
   proton section get <secid>
   proton section delete <secid>
@@ -20,29 +33,18 @@ Usage:
   proton sequence get <seqid>
   proton sequence delete <seqid>
   proton sequence set-layout --seq=<seqid> --layout-name=<layout-name>
-  proton permissions add Administrate --user=<user-name>
-  proton permissions add EditSequence --user=<user-name> --sequence=<seqid>
-  proton permissions add EditSection --user=<user-name> --sequence=<seqid> --section=<secid>
-  proton permissions remove Administrate --user=<user-name>
-  proton permissions remove EditSequence --user=<user-name> --sequence=<seqid>
-  proton permissions remove EditSection --user=<user-name> --sequence=<seqid> --section=<secid>
-  proton permissions list
+  proton setup
   proton user add <user-name>
   proton user delete <user-name>
-  proton user get <user-key>
-  proton run update
-  proton run repl
-  proton run show
+  proton user get <user-name>
   proton vixen import-sequence --seq=<seq-file> --audio=<audio-file> --layout-name=<layout-name>
   proton vixen import-layout <layout-file>
-  proton patch channel --proton=<proton-ch> --dmx=<dmx-ch>
-  proton patch layout --patch=<patch-file> [--layout-name=<layout-name>]
 Options:
   -h --help     Show this screen
 ";
 
 // Docopt arguments are mapped to this struct
-#[derive(Debug, RustcDecodable)]
+#[derive(Debug, Deserialize)]
 pub struct DocoptArgs {
   pub arg_layout_file: Option<String>,
   pub arg_layout_name: Option<String>,
