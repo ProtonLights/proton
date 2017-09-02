@@ -5,21 +5,38 @@ set openssl_cert_download=https://curl.haxx.se/ca/cacert.pem
 set sfml_download=https://www.sfml-dev.org/files/SFML-2.4.2-windows-vc14-64-bit.zip
 set csfml_download=https://www.sfml-dev.org/files/CSFML-2.4-windows-64-bit.zip
 
+set script_dir=%~dp0
+set zipjs_location=%script_dir%\zipjs.bat
+set tmp_dir=%script_dir%temp_%RANDOM%
+
+rem Administrator permissions needed (making directory in C drive)
+rem Check permissions with net session command (https://stackoverflow.com/questions/4051883/batch-script-how-to-check-for-admin-rights)
+net session >NUL 2>&1
+if %ERRORLEVEL% NEQ 0 (
+	echo This script needs administrator privileges ^(right click, run as administrator^)
+	goto END
+)
+
 echo Creating ProtonDependencies directory
-@mkdir C:\ProtonDependencies 2>NUL
+@rmdir /s /q C:\ProtonDependencies 2>NUL
+@mkdir C:\ProtonDependencies
+if %ERRORLEVEL% NEQ 0 (
+	echo Failed to create ProtonDependencies directory. Aborting.
+	goto END
+)
 
 echo Setting up temp directory
-set tmp_dir=temp_%RANDOM%
 @mkdir %tmp_dir%
-
-echo Setting up variables
-set openssl_exe=%tmp_dir%\OpenSSL.exe
-set openssl_cert=%tmp_dir%\cacert.pem
-set sfml_zip=%tmp_dir%\SFML.zip
-set csfml_zip=%tmp_dir%\CSFML.zip
-
+if %ERRORLEVEL% NEQ 0 (
+	echo Failed to create ProtonDependencies directory. Aborting.
+	goto END
+)
 
 echo -------------------------
+echo OpenSSL
+set openssl_exe=%tmp_dir%\OpenSSL.exe
+set openssl_cert=%tmp_dir%\cacert.pem
+
 echo Downloading OpenSSL 1.1.0f
 @powershell -Command "(New-Object Net.WebClient).DownloadFile($env:openssl_download, $env:openssl_exe)"
 
@@ -43,42 +60,51 @@ echo Setting SSL_CERT_FILE
 setx SSL_CERT_FILE C:\ProtonDependencies\OpenSSL-Win64\certs\cacert.pem >NUL
 
 echo -------------------------
+:SFML
+echo SFML
+
+set sfml_zip=%tmp_dir%\SFML.zip
+set sfml_extracted=%tmp_dir%\SFML
+
 echo Downloading SFML 2.4.2
 @powershell -Command "(New-Object Net.WebClient).DownloadFile($env:sfml_download, $env:sfml_zip)"
 
 echo Extracting SFML
-@call zipjs.bat unzip -source %cd%\%sfml_zip% -destination SFML
+@call %zipjs_location% unzip -source %sfml_zip% -destination %sfml_extracted%
 
 echo Copying SFML files
-@move SFML\SFML-2.4.2 C:\ProtonDependencies\ >NUL
+@move %sfml_extracted%\SFML-2.4.2 C:\ProtonDependencies\ >NUL
 
 echo Setting SFML_HOME
 @setx SFML_HOME C:\ProtonDependencies\SFML-2.4.2 >NUL
 
-echo Cleaning up
-rmdir /s /q SFML >NUL
-
 echo -------------------------
+echo CSFML
+
+set csfml_zip=%tmp_dir%\CSFML.zip
+set csfml_extracted=%tmp_dir%\CSFML
+
 echo Downloading CSFML 2.4
 @powershell -Command "(New-Object Net.WebClient).DownloadFile($env:csfml_download, $env:csfml_zip)"
 
 echo Extracting CSFML
-@call zipjs.bat unzip -source %cd%\%csfml_zip% -destination CSFML
+@call %zipjs_location% unzip -source %csfml_zip% -destination %csfml_extracted%
 
 echo Copying CSFML files
-@move CSFML\CSFML C:\ProtonDependencies\ >NUL
+@move %csfml_extracted%\CSFML C:\ProtonDependencies\ >NUL
 
 echo Setting CSFML_HOME
 @setx CSFML_HOME C:\ProtonDependencies\CSFML >NUL
-
-echo Cleaning up
-rmdir /s /q CSFML >NUL
 
 echo -------------------------
 echo Appending PATH
 @setx PATH "%PATH%;C:\ProtonDependencies\CSFML\bin;C:\ProtonDependencies\SFML-2.4.2\bin" >NUL
 
 echo Removing temp directory
-rmdir /s /q %tmp_dir%
+@rmdir /s /q %tmp_dir%
 
-pause
+echo Setup finished! If there were no errors, you should now be able to compile and run proton, proton-cli, and proton-runner
+
+:END
+	echo Press any key to exit setup...
+	pause >NUL
