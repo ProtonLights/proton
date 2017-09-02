@@ -97,8 +97,15 @@ echo Setting CSFML_HOME
 @setx CSFML_HOME C:\ProtonDependencies\CSFML >NUL
 
 echo -------------------------
-echo Appending PATH
-@setx PATH "%PATH%;C:\ProtonDependencies\CSFML\bin;C:\ProtonDependencies\SFML-2.4.2\bin" >NUL
+rem Check if PATH variable already set
+set path_addition="C:\ProtonDependencies\CSFML\bin;C:\ProtonDependencies\SFML-2.4.2\bin"
+echo %PATH% | find %path_addition% >NUL
+if %ERRORLEVEL% == 0 (
+	echo PATH variable already set. Ignoring...
+) else (
+	echo Appending PATH
+	@setx PATH "%PATH%;%path_addition%" >NUL
+)
 
 echo Removing temp directory
 @rmdir /s /q %tmp_dir%
