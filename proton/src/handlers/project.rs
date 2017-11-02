@@ -1,7 +1,5 @@
 use docopt_args::DocoptArgs;
 use ProtonConfig;
-use std::fs::File;
-use std::io::Write;
 use util;
 
 /// Handles all "proton project ..." commands
@@ -29,12 +27,8 @@ pub fn project_new(args: DocoptArgs, mut config: ProtonConfig) {
     // Save admin key to file if successful
     if output.is_some() {
         let key = output.unwrap();
-
-        // new-project returns an SSH key, which starts with a bunch of dashes
-        let key_start = key.find("-").expect("Invalid output from proton_cli");
         let file_name = format!("{}.pub", project_name);
-        let mut out_file = File::create(&file_name).expect("Failed to create key file");
-        out_file.write(&key.into_bytes()[key_start..]);
+        util::write_key_to_file(key, &file_name);
 
         // Also add to config
         config.key = file_name;

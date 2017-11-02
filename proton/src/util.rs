@@ -1,5 +1,8 @@
+use std::fs::File;
+use std::io::Write;
 use std::process::{Command, Output};
 
+/// Runs proton_cli with the given command and arguments
 pub fn run_proton_cli(command: &str, args: &[String]) -> Option<String> {
     let output = Command::new("proton_cli")
         .args(args)
@@ -9,6 +12,7 @@ pub fn run_proton_cli(command: &str, args: &[String]) -> Option<String> {
     handle_output(output)
 }
 
+/// Runs proton_vixen_converter.py with the given command and arguments
 pub fn run_vixen_converter(command: &str, args: &[String]) -> Option<String> {
     let output = Command::new("python3")
         .arg("../proton-vixen-converter/vixenconverter/converter.py")
@@ -35,4 +39,14 @@ fn handle_output(output: Output) -> Option<String> {
     // Also print output for fun
     println!("{}", out);
     Some(out)
+}
+
+/// Writes an SSH key output to a file
+pub fn write_key_to_file(key: String, file_name: &str) {
+    // When handle_output returns an SSH key, it starts with a bunch of dashes
+    let key_start = key.find("-").expect("Invalid output from proton_cli");
+
+    // Write key
+    let mut out_file = File::create(&file_name).expect("Failed to create key file");
+    let _ = out_file.write(&key.into_bytes()[key_start..]);
 }
