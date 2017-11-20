@@ -23,7 +23,7 @@ pub fn vixen_import_layout(args: DocoptArgs, config: ProtonConfig) {
         "import-layout".to_string(),
         layout_path];
 
-    let _ = util::run_vixen_converter(&args);
+    let _ = util::run_vixen_converter(&config.vixen_converter_py, &args);
 }
 
 // proton vixen import-sequence --seq=<seq-file> --audio=<audio-file> --layout-name=<layout-name>
@@ -40,7 +40,7 @@ pub fn vixen_import_sequence(args: DocoptArgs, config: ProtonConfig) {
         audio_path,
         args.flag_layout_name.unwrap().to_string()];
 
-    let _ = util::run_vixen_converter(&args);
+    let _ = util::run_vixen_converter(&config.vixen_converter_py, &args);
 }
 
 /*

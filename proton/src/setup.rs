@@ -15,9 +15,15 @@ pub fn configure(old_config: ProtonConfig) {
     // Get config values
     let key_path = get_config_value("key_path", old_config.key, &mut handle);
     let vixen_folder = get_config_value("vixen_folder", old_config.vixen_folder, &mut handle);
+    let vixen_converter_py = get_config_value("vixen_converter_py", old_config.vixen_converter_py, &mut handle);
  
     // Create config file (overwrite if already there)
-    let config = ProtonConfig::new(key_path.trim(), vixen_folder.trim());
+    let config = ProtonConfig::new(
+        key_path.trim(),
+        vixen_folder.trim(),
+        vixen_converter_py.trim()
+    );
+
     config.save()
 }
 
