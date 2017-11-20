@@ -17,8 +17,8 @@ impl Config {
     pub fn default_config() -> Config {
         return Config::new(
             "user.pub",
-            "~/Dropbox/LightShow/Sequencing/Sequence Data",
-            "~/git/proton/proton-vixen-converter/vixenconverter/converter.py");
+            "/home/lightshow/Dropbox/LightShow/Sequencing/Sequence Data",
+            "/home/lightshow/git/proton/proton-vixen-converter/vixenconverter/converter.py");
     }
 
     // Creates new config file. Does not save
