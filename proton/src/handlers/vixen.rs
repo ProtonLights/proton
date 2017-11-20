@@ -21,7 +21,8 @@ pub fn vixen_import_layout(args: DocoptArgs, config: ProtonConfig) {
 
     let args = [
         "import-layout".to_string(),
-        layout_path];
+        layout_path,
+        config.default_dmx_channel.to_string()];
 
     let _ = util::run_vixen_converter(&config.vixen_converter_py, &args);
 }

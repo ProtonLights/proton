@@ -16,12 +16,14 @@ pub fn configure(old_config: ProtonConfig) {
     let key_path = get_config_value("key_path", old_config.key, &mut handle);
     let vixen_folder = get_config_value("vixen_folder", old_config.vixen_folder, &mut handle);
     let vixen_converter_py = get_config_value("vixen_converter_py", old_config.vixen_converter_py, &mut handle);
+    let default_dmx_channel = get_config_value("default_dmx_channel", old_config.default_dmx_channel.to_string(), &mut handle);
  
     // Create config file (overwrite if already there)
     let config = ProtonConfig::new(
         key_path.trim(),
         vixen_folder.trim(),
-        vixen_converter_py.trim()
+        vixen_converter_py.trim(),
+        default_dmx_channel.parse::<u16>().expect("DMX channel not a valid u16")
     );
 
     config.save()
