@@ -12,13 +12,15 @@ pub fn run_proton_cli(command: &str, args: &[String]) -> Option<String> {
     handle_output(output)
 }
 
-/// Runs proton_vixen_converter.py with the given command and arguments
+/// Runs proton_vixen_converter.py with the given arguments
 pub fn run_vixen_converter(command: &str, args: &[String]) -> Option<String> {
+    println!("Running proton vixen converter...");
+
     let output = Command::new("python3")
-        .arg("../proton-vixen-converter/vixenconverter/converter.py")
+        .arg(command)
         .args(args)
         .output()
-        .expect(&format!("Failed to run {}", command));
+        .expect(&"Failed to run proton vixen converter");
 
     handle_output(output)
 }

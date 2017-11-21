@@ -1,29 +1,43 @@
 use serde_json;
 use std::fs::File;
 use std::io::{self, Read, Write};
-use std::path::Path;
 
 #[derive(Serialize, Deserialize)]
 pub struct Config {
-    pub key: String,            // Last auth key used (usually user key)
-    pub vixen_folder: String,   // Points to "Sequence Data" Vixen folder
+    // Last auth key used (usually user key)
+    pub key: String,
+    // Points to "Sequence Data" Vixen folder
+    pub vixen_folder: String,
+    // Points to "vixenconverter/converter.py" from proton-vixen-converter
+    pub vixen_converter_py: String,
+    // An unused DMX channel that can be set for unused Vixen channels
+    pub default_dmx_channel: u16
 }
 
 impl Config {
     // Creates a new, default config
     pub fn default_config() -> Config {
-        return Config::new("user.pub", "~/Dropbox/LightShow/Sequencing/Sequence Data");
+        return Config::new(
+            "user.pub",
+            "/home/lightshow/Dropbox/LightShow/Sequencing/Sequence Data",
+            "/home/lightshow/git/proton/proton-vixen-converter/vixenconverter/converter.py",
+            511
+        );
     }
 
     // Creates new config file. Does not save
     pub fn new(
         key_path: &str,
-        vixen_folder: &str
+        vixen_folder: &str,
+        vixen_converter_py: &str,
+        default_dmx_channel: u16
     ) -> Config {
     
         Config {
             key: key_path.to_string(),
             vixen_folder: vixen_folder.to_string(),
+            vixen_converter_py: vixen_converter_py.to_string(),
+            default_dmx_channel: default_dmx_channel
         }
     }
 
@@ -47,9 +61,9 @@ impl Config {
         let mut cfg_file = File::create("proton.cfg").expect("Failed to create config file");
 
         // Serialize this object into a string
-        let config = serde_json::to_string(&self).expect("Failed to encode config file into JSON");
+        let config = serde_json::to_string_pretty(&self).expect("Failed to encode config file into JSON");
 
         // Write to file
-        cfg_file.write(&config.into_bytes());
+        cfg_file.write(&config.into_bytes()).expect("Failed to write config file to disk");
     }
 }
